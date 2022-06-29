@@ -1,7 +1,6 @@
 # BedGO
 
-## Enrichment analysis of Gene Ontology Terms from BED files
-The scripts included here can be used to find enriched terms from Gene Ontology (GO) associated to the genomic regions of a BED file.
+Enrichment analysis of Gene Ontology (GO) Terms associated to the genomic regions of a BED file.
 
 GO terms considered for the enrichment may correspond to any of these categories:
  - Biological Process (BP)
@@ -12,17 +11,7 @@ GO terms considered for the enrichment may correspond to any of these categories
 
 The scripts to be run will depend on the files from which the user starts from. The most simple usage would be finding GO terms enriched in a list of genes given a reference genome in BED format. See _Usage_ section for detailed information about each script.
 
-## Setup
-
-The recommended way of installing BedGO is using [conda](https://docs.conda.io/en/latest/miniconda.html):
-
-		`conda create -n BedGO -c bioconda python bioconductor-topgo bedtools`
- 
-Instructions about how to install conda in your system: https://docs.conda.io/en/latest/miniconda.html
-
-For other types of installations check the _Requirements_ section.
- 
-### Requirements
+## Requirements
    
 The number indicates the version with which were tested the commands in the _Usage_ section. 
  
@@ -31,8 +20,13 @@ The number indicates the version with which were tested the commands in the _Usa
   - topGO (v. 2.37) from [Bioconductor](http://www.bioconductor.org/)
 - Bedtools (2.30.0)
 
-## Usage 
+The recommended way of installing BedGO is using [conda](https://docs.conda.io/en/latest/miniconda.html):
 
+	`conda create -n BedGO -c bioconda python bioconductor-topgo bedtools`
+
+With conda you don't have to modify *system* files nor interfer with the current installation in your system. Instructions about how to install conda in your system: https://docs.conda.io/en/latest/miniconda.html
+ 
+## Usage 
 Commands in this sections assume you are working in the same folder as the python scripts.
 The procedence and instructions for downloading the files used in each example it is described in _Data Sources_ section. 
 
@@ -40,7 +34,7 @@ The procedence and instructions for downloading the files used in each example i
 #### _gff2bed.py_
  Extract from a _GFF3_ file the coordinates of the chromosomic regions and the GeneIDs included in them. _GFF3_ is a specification of the _General Feature Format_ ([GFF](http://gmod.org/wiki/GFF3)). There are other (older) specifications based on GFF that **may not be a valid input**.
 
- Sequence IDs would be automatically converted to [](UCSC) format (chr1, chrX, chrM etc.). The execution will stop if the conversion of sequence IDs fails. Use '--mappings' option to indicate using a file instead of the internal dictionary for this conversion.
+ Sequence IDs would be automatically converted to [https://genome.ucsc.edu/FAQ/FAQformat.html](UCSC) format (chr1, chrX, chrM etc.). The execution will stop if the conversion of sequence IDs fails. Use '--mappings' option to indicate using a file instead of the JSON files for this conversion.
  The filename of the input will be used for saving the results but replacing '.gff3' with '.bed'. This can be overriden with  '--output' option.
 
 		`python3 gff2bed.py --mappings <seqids-refseq2ucsc> <genome.version.gff3.gz>`
@@ -67,13 +61,14 @@ The procedence and instructions for downloading the files used in each example i
 ## Example
 
 Find the enriched GO terms associated with the genes found in the genomic regions of the file *example/example.bed*
+Note that because of its size, **the reference genome used here is not included in the *example* folder**. You'll need to download it from [here](https://ftp.ncbi.nlm.nih.gov/genomes/archive/old_refseq/Homo_sapiens/ARCHIVE/ANNOTATION_RELEASE.109/ref_GRCh38.p12_top_level.gff3.gz)
 
-1. 
-`python3 gff2bed.py --mappings mappings_refseq2ucsc.json example/ref_GRCh38.p12_top_level.gff3.gz`
+1.
+	`python3 gff2bed.py --mappings mappings_refseq2ucsc.json example/ref_GRCh38.p12_top_level.gff3.gz`
 2. 
-`python3 annotate_bed.py example/ref_GRCh38.p12_top_level.bed.gz example/example.bed`
+	`python3 annotate_bed.py example/ref_GRCh38.p12_top_level.bed.gz example/example.bed`
 3. 
-`python3 goea_bedfile.py example/annot_example.bed -m gene2go.gz -go BP,MF,CC -o results/`
+	`python3 goea_bedfile.py example/annot_example.bed -m gene2go.gz -go BP,MF,CC -o results/`
 
 ## Data Sources
 
